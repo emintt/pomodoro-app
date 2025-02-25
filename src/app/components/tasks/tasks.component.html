@@ -1,7 +1,21 @@
 <div>
-  <h2>What would you need to focus on right now?</h2>
+   @if (!taskItem().length) {
+    <p>Loading...</p>
+   }
+
+  <h3>What would you need to focus on right now?</h3>
   <form class="row">
     <input id="task-input" (keyup)="keyUpHandler($event)" placeholder="Add task..." />
     <button type="submit">Add</button>
   </form>
+
+  <ul class="task-items">
+    @for (task of taskItem(); track task.id) {
+      <li appStrikethroughCompletedTask [isCompleted]="task.completed" class="task_item">
+        <input id="task-{{task.id}}" type="checkbox" [checked]="task.completed">
+        <label for="task-{{task.id}}">{{task.name}}</label>
+      </li>
+    }
+  </ul>
+
 </div>
