@@ -11,10 +11,7 @@
 
   <ul class="task-items">
     @for (task of taskItem(); track task.id) {
-      <li appStrikethroughCompletedTask [isCompleted]="task.completed" class="task_item">
-        <input id="task-{{task.id}}" type="checkbox" [checked]="task.completed">
-        <label for="task-{{task.id}}">{{task.name}}</label>
-      </li>
+      <app-task-item [task]="task" />
     }
   </ul>
 
