@@ -1,5 +1,5 @@
 <div>
-   @if (!taskItem().length) {
+   @if (!taskItems().length) {
     <p>Loading...</p>
    }
 
@@ -10,8 +10,8 @@
   </form>
 
   <ul class="task-items">
-    @for (task of taskItem(); track task.id) {
-      <app-task-item [task]="task" />
+    @for (task of taskItems(); track task.id) {
+      <app-task-item (taskToggle)="this.updateTaskItems($event)" [task]="task" />
     }
   </ul>
 

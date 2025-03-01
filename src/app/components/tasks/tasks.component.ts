@@ -17,12 +17,25 @@ export class TasksComponent implements OnInit{
   }
 
   taskService = inject(TasksService);
-  taskItem = signal<Array<Task>>([]);
+  taskItems = signal<Array<Task>>([]);
 
   ngOnInit(): void {
     console.log(this.taskService.taskItems);
-    this.taskItem.set(this.taskService.taskItems);
+    this.taskItems.set(this.taskService.taskItems);
   }
 
-
+  updateTaskItems(task: Task) {
+    this.taskItems.update((items) => {
+      return items.map((item) => {
+        if (item.id === task.id) {
+          return {
+            ...item,
+            completed: !item.completed,
+          };
+        }
+        return item;
+      });
+    });
+  }
 }
+
