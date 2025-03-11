@@ -1,3 +1,9 @@
 .home {
   height: 87vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background:  #1E2448;
+  padding: 12px;
 }

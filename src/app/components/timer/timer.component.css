@@ -4,4 +4,49 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 24px;
+  text-align: center;
+  min-width: 320px;
+  background: rgba(169, 181, 223, 0.25); 
+  backdrop-filter: blur(10px); 
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  min-width: 350px;
+  border: 2px solid rgba(255, 255, 255, 0.2); 
+}
+
+.timer p:first-of-type {
+  font-size: 120px; 
+  font-weight: bold;
+  color: #FFF2F2;
+  letter-spacing: 3px;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4); 
+  margin: 20px
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px; /* Space between buttons */
+  margin-top: 20px;
+}
+
+button {
+  flex: 1;
+  max-width: 150px;
+  background: none;
+  color: #FFF2F2;
+  border: 2px solid #FFF2F2;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #FFF2F2;
+  color: #2D336B;
+  transform: scale(1.05);
 }

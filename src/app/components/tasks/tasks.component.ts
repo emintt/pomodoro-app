@@ -20,8 +20,8 @@ export class TasksComponent implements OnInit{
   taskItems = signal<Array<Task>>([]);
 
   ngOnInit(): void {
-    console.log(this.taskService.taskItems);
-    this.taskItems.set(this.taskService.taskItems);
+    console.log(this.taskService.taskCollection); // log taskCollection from task service
+    this.taskItems.set(this.taskService.taskCollection.find()); // Call find returns an array of documents
   }
 
   updateTaskItems(task: Task) {
