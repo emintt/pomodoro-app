@@ -28,7 +28,7 @@ export class TimerComponent {
   // update the countdown every 1 second
   countdown = () => {
     if (this.remainingTime() === 0) {
-      this.notificationService.sendNotification(`It's time to take a short break!`);
+      this.notificationService.sendNotification('Pomodoro AppComponent', `It's time to take a short break!`);
       this.pause();
       return;
     }

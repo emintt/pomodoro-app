@@ -25,9 +25,9 @@ export class NotificationService {
   };
 
   // Once permission has been granted we can send the notification
-  sendNotification = (text: string) => {
+  sendNotification = (title: string, body: string) => {
     if (this.permissionGranted) {
-      sendNotification(text);
+      sendNotification({title: title, body: body});
       this.playSound();
     }
   };
