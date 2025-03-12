@@ -1,4 +1,5 @@
-import { Component, computed, signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, signal, WritableSignal } from '@angular/core';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-timer',
@@ -10,6 +11,9 @@ import { Component, computed, signal, WritableSignal } from '@angular/core';
 
 
 export class TimerComponent {
+  notificationService = inject(NotificationService);
+
+
   remainingTime = signal<number>(0.25 * 60 * 1000);  // 1p30s 
   minute = computed(
     () => Math.floor(this.remainingTime() / 1000 / 60) % 60
@@ -24,6 +28,7 @@ export class TimerComponent {
   // update the countdown every 1 second
   countdown = () => {
     if (this.remainingTime() === 0) {
+      this.notificationService.sendNotification(`It's time to take a short break!`);
       this.pause();
       return;
     }
