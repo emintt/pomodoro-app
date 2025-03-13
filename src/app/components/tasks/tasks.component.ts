@@ -3,25 +3,25 @@ import { TasksService } from '../../services/tasks.service';
 import { Task } from '../../types/tasks.type';
 import { StrikethroughCompletedTaskDirective } from '../../directives/strikethrough-completed-task.directive';
 import { TaskItemComponent } from "../task-item/task-item.component";
+import { NewTaskComponent } from "../new-task/new-task.component";
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [TaskItemComponent],
+  imports: [TaskItemComponent, NewTaskComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css'
 })
 export class TasksComponent implements OnInit{
-  keyUpHandler = (event: KeyboardEvent) => {
-    console.log(`me typing ${event.key}`);
-  }
+
 
   taskService = inject(TasksService);
   taskItems = signal<Array<Task>>([]);
 
   ngOnInit(): void {
-    console.log(this.taskService.taskCollection); // log taskCollection from task service
-    this.taskItems.set(this.taskService.taskCollection.find()); // Call find returns an array of documents
+    // console.log(this.taskService.taskCollection); // log taskCollection from task service
+    const a = this.taskItems.set(this.taskService.taskCollection.find()); // Call find returns an array of documents
+    console.log(this.taskService.taskCollection);
   }
 
   updateTaskItems(task: Task) {
@@ -36,6 +36,10 @@ export class TasksComponent implements OnInit{
         return item;
       });
     });
+  }
+
+  addTaskItem(task: Task) {
+
   }
 }
 

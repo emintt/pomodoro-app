@@ -1,13 +1,17 @@
 <div>
-   @if (!taskItems().length) {
-    <p>Loading...</p>
-   }
+  @if (!taskItems().length) {
+  <p>Loading...</p>
+  }
 
-  <h3>What would you need to focus on right now?</h3>
-  <form class="row">
-    <input id="task-input" (keyup)="keyUpHandler($event)" placeholder="Add task..." />
-    <button type="submit">Add</button>
-  </form>
+  <app-new-task />
+
+  <!-- <form>
+    <div>
+      <label for="project"></label>
+      <input type="text" id="title" name="project" placeholder="Add project..." />
+      <button type="submit">Add</button>
+    </div>
+  </form> -->
 
   <ul class="task-items">
     @for (task of taskItems(); track task.id) {

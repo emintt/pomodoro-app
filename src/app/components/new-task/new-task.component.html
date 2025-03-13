@@ -1,0 +1,13 @@
+<div>
+  <h3>What would you need to focus on right now?</h3>
+
+  <form id="new-task-form" (ngSubmit)="onSubmit()">
+   
+    <label for="new-task"></label>
+    <input type="text" id="new-task" name="new-task" placeholder="Add task..." [(ngModel)]="enteredTask" />
+    <button type="submit">Add</button>
+
+   
+  </form>
+ 
+</div>
