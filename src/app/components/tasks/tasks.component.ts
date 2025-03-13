@@ -14,20 +14,27 @@ import { NewTaskComponent } from "../new-task/new-task.component";
 })
 export class TasksComponent implements OnInit{
 
-
   taskService = inject(TasksService);
   taskItems = signal<Array<Task>>([]);
 
-  ngOnInit(): void {
-    // console.log(this.taskService.taskCollection); // log taskCollection from task service
-    const a = this.taskItems.set(this.taskService.taskCollection.find()); // Call find returns an array of documents
+  async ngOnInit(): Promise<void> {
+    await this.taskService.dbLoaded;
+    console.log(this.taskService.taskItems); // log taskCollection from task service
+    if (this.taskService.taskItems) {
+      this.taskItems.set(this.taskService.taskItems);
+    } else {
+      this.taskItems.set([]);
+    }
     console.log(this.taskService.taskCollection);
+    // const taskCollection = this.taskService.getTaskCollection();
+    // this.taskItems.set(taskCollection.find()); // Call find returns an array of documents
+    // console.log(this.taskService.taskCollection);
   }
 
   updateTaskItems(task: Task) {
     this.taskItems.update((items) => {
       return items.map((item) => {
-        if (item.id === task.id) {
+        if (item.$loki === task.$loki) {
           return {
             ...item,
             completed: !item.completed,

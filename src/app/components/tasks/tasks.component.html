@@ -14,7 +14,7 @@
   </form> -->
 
   <ul class="task-items">
-    @for (task of taskItems(); track task.id) {
+    @for (task of taskItems(); track task.$loki) {
       <app-task-item (taskToggle)="this.updateTaskItems($event)" [task]="task" />
     }
   </ul>

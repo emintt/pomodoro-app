@@ -1,5 +1,5 @@
 type Task = {
-  id: number;
+  $loki?: number;
   projectId?: number;
   name: string;
   startTime: number;

@@ -1,9 +1,9 @@
 <li appStrikethroughCompletedTask [isCompleted]="task().completed" class="task_item">
   <input 
-    id="task-{{task().id}}" 
+    id="task-{{task().$loki}}" 
     type="checkbox" 
     [checked]="task().completed"
     (change)="this.taskClicked()"
   >
-  <label for="task-{{task().id}}">{{task().name}}</label>
+  <label for="task-{{task().$loki}}">{{task().name}}</label>
 </li>
