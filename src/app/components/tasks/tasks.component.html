@@ -1,9 +1,9 @@
-<div>
+<div class="tasks-container">
   @if (!taskItems().length) {
   <p>Loading...</p>
   }
 
-  <app-new-task />
+  <app-new-task (taskOutput)="this.addTaskItem($event)" />
 
   <!-- <form>
     <div>

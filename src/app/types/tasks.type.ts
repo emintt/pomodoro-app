@@ -3,8 +3,9 @@ type Task = {
   projectId?: number;
   name: string;
   startTime: number;
-  duration: number;
   completed: boolean;
+  totalTimeSpent?: number; // in milliseconds
+  pomodorosCompleted?: number; 
 };
 
 type Project = {

@@ -1,13 +1,18 @@
 <div>
   <h3>What would you need to focus on right now?</h3>
 
-  <form id="new-task-form" (ngSubmit)="onSubmit()">
+  <form id="new-task-form" (ngSubmit)="onSubmit(newTaskForm)" #newTaskForm="ngForm">
    
     <label for="new-task"></label>
-    <input type="text" id="new-task" name="new-task" placeholder="Add task..." [(ngModel)]="enteredTask" />
-    <button type="submit">Add</button>
+    <input type="text" id="new-task" name="new-task" placeholder="Add task..." 
+      [(ngModel)]="enteredTaskName" required #newTask="ngModel" />
+    <div [hidden]="newTask.valid || newTask.pristine"
+          class="alert">
+      Task name is required
+    </div>
+    <button type="submit" [disabled]="!newTaskForm.form.valid">Add</button>
 
    
   </form>
  
-</div>
+</div>    

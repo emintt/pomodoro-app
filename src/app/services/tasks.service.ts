@@ -14,17 +14,21 @@ export class TasksService {
   taskItems: Task[] = [];
   
   constructor() { 
+    
     this.dbLoaded = new Promise((resolve, reject) => {
+      
       this.db = new Loki('pomodoro-app.db', {
         autoload: true,
         autosave: true,
         autoloadCallback: () => {
           this.taskCollection = this.db.getCollection<Task>('taskItems') 
             || this.db.addCollection<Task>('taskItems');
+          // delete all docs from old collection
+          this.taskCollection.removeWhere(() => true);
           if (this.taskCollection.count() === 0) {
             this.insertInitialData();
           }
-          this.taskItems = this.taskCollection.find();
+          this.taskItems = this.taskCollection.find().reverse();
           console.log(this.taskItems);
           resolve();
         },
@@ -40,18 +44,31 @@ export class TasksService {
       // insert array of documents
       this.taskCollection.insert([
        {
-         name: 'make db connection',
+         name: 'no task',
          startTime: 12345677,
-         duration: 65363526,
+         totalTimeSpent: 0,
+         pomodorosCompleted: 0,
          completed: false
-       },
-       {
-         name: 'make ui',
-         startTime: 364868,
-         duration: 36546356,
-         completed: true,
        }
      ]);
     }
   }
+
+  addTask(task: Task) {
+    if (this.taskCollection) {
+      this.taskCollection.insert([
+        {
+          name: task.name,
+          startTime: task.startTime,
+          totalTimeSpent: 0,
+          pomodorosCompleted: 0,
+          completed: false
+        }
+      ]);
+    } else {
+      console.log('cannot add task to db');
+    }
+  }
+
+
 }

@@ -1,5 +1,6 @@
-import { Component, output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, Output, output } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import { Task } from '../../types/tasks.type';
 
 
 @Component({
@@ -11,12 +12,20 @@ import { FormsModule } from '@angular/forms';
 })
 export class NewTaskComponent {
   // value user entered, which is accessed by ngModel
-  enteredTask = '';
+  enteredTaskName = '';
   // task event to emit entered task to task component through task event
-  task = output<string>();
+  taskOutput = output<Task>();
 
-  onSubmit() {
+  submitted = false;
+
+  onSubmit(newTaskForm: NgForm) {
     console.log('submit');
-    this.task.emit(this.enteredTask);
+    this.taskOutput.emit({
+      name: this.enteredTaskName,
+      startTime: Date.now(),
+      completed: false 
+    });
+    this.submitted = true;
+    newTaskForm.reset();
   }
 }
