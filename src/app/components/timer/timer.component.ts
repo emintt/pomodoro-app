@@ -1,5 +1,8 @@
 import { Component, computed, inject, signal, WritableSignal } from '@angular/core';
 import { NotificationService } from '../../services/notification.service';
+import { SelectedTaskService } from '../../services/selected-task.service';
+import { Task } from '../../types/tasks.type';
+import { TasksService } from '../../services/tasks.service';
 
 @Component({
   selector: 'app-timer',
@@ -12,24 +15,40 @@ import { NotificationService } from '../../services/notification.service';
 
 export class TimerComponent {
   notificationService = inject(NotificationService);
+  selectedTaskService = inject(SelectedTaskService);
+  tasksService = inject(TasksService);
 
-
-  remainingTime = signal<number>(0.25 * 60 * 1000);  // 1p30s 
+  initialTime = 5 * 1000; // 5s
+  remainingTime = signal<number>(this.initialTime);  
+  intervalId: ReturnType<typeof setTimeout> | undefined = undefined;
   minute = computed(
     () => Math.floor(this.remainingTime() / 1000 / 60) % 60
   );
   second = computed(
     () => Math.floor(this.remainingTime() / 1000) % 60
   );
+  startTime: number = 0;
+  elapsedTime: number = 0;
 
-  intervalId: ReturnType<typeof setTimeout> | undefined = undefined;
+  // Get currently selected task
+  get selectedTask(): Task | null {
+    return this.selectedTaskService.getSelectedTask();
+  }
 
-
-  // update the countdown every 1 second
+  // count down, update the countdown every 1 second
   countdown = () => {
-    if (this.remainingTime() === 0) {
-      this.notificationService.sendNotification('Pomodoro AppComponent', `It's time to take a short break!`);
-      this.pause();
+    if (this.remainingTime() <= 0) {
+      clearInterval(this.intervalId);
+      this.intervalId = undefined;
+
+      const duration = this.initialTime;
+      if (this.selectedTask) {
+        this.tasksService.updateTaskTime(this.selectedTask, duration);
+      }
+
+      this.notificationService.sendNotification('Pomodoro', `It's time to take a short break!`);
+      console.log(`Time's up for ${this.selectedTask?.name}.  ${duration / 1000} seconds`);
+      this.resetTimer();
       return;
     }
     this.remainingTime.update((val: number) => {
@@ -41,18 +60,32 @@ export class TimerComponent {
     if (!this.intervalId) {
       this.intervalId = setInterval(this.countdown, 1000);
     };
- 
+    console.log(`Resuming with: ${this.remainingTime()} ms`);
+
   };
 
   pause = () => {
     if (this.intervalId) {
+      console.log('pause' + this.selectedTask);
+
       clearInterval(this.intervalId);
       this.intervalId = undefined;
+      console.log(`Paused at: ${this.remainingTime()} ms`);
     };
+
   };
+
+
+  // Reset the remaining time to the initial value 
+  resetTimer = () => {
+    this.remainingTime.set(this.initialTime); 
+  };
+
 
   ngOnDestroy() {
     this.pause();
   }
+
+
   
 }

@@ -1,5 +1,5 @@
 import Loki from 'lokijs';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Task } from '../types/tasks.type';
 
 @Injectable({
@@ -23,8 +23,8 @@ export class TasksService {
         autoloadCallback: () => {
           this.taskCollection = this.db.getCollection<Task>('taskItems') 
             || this.db.addCollection<Task>('taskItems');
-          // delete all docs from old collection
-          this.taskCollection.removeWhere(() => true);
+          // // delete all docs from old collection
+          // this.taskCollection.removeWhere(() => true);
           if (this.taskCollection.count() === 0) {
             this.insertInitialData();
           }
@@ -67,6 +67,21 @@ export class TasksService {
       ]);
     } else {
       console.log('cannot add task to db');
+    }
+  }
+
+  updateTaskTime(task: Task, timeSpent: number) {
+    if (!this.taskCollection) {
+      return;
+    } ;
+
+    // Find task in db
+    const taskToUpdate = this.taskCollection.findOne({$loki: task.$loki});
+
+    if (taskToUpdate && taskToUpdate.totalTimeSpent !== undefined) {
+      taskToUpdate.totalTimeSpent += timeSpent;
+      this.taskCollection.update(taskToUpdate);
+      console.log(`Updated time for ${task.name}: ${taskToUpdate.totalTimeSpent} ms`);
     }
   }
 

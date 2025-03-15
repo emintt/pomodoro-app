@@ -1,6 +1,7 @@
 .tasks-container {
   max-height: 25vh;
   overflow-y: auto;
+  margin-top: 20px;
 }
 
 .task-items {

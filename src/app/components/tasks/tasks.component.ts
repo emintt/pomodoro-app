@@ -1,3 +1,4 @@
+import { SelectedTaskService } from './../../services/selected-task.service';
 import { Component, inject, OnInit, output, signal } from '@angular/core';
 import { TasksService } from '../../services/tasks.service';
 import { Task } from '../../types/tasks.type';
@@ -15,6 +16,9 @@ export class TasksComponent implements OnInit{
 
   taskService = inject(TasksService);
   taskItems = signal<Array<Task>>([]);
+  selectedTaskService = inject(SelectedTaskService);
+
+
 
   async ngOnInit(): Promise<void> {
     await this.taskService.dbLoaded;
@@ -27,7 +31,17 @@ export class TasksComponent implements OnInit{
     console.log(this.taskService.taskCollection);
   }
 
-  // update complete property
+  // Select a task using SelectedTaskService
+  selectTask(task: Task) {
+    this.selectedTaskService.setSelectedTask(task);
+  }
+
+  // Get currently selected task
+  get selectedTask(): Task | null {
+    return this.selectedTaskService.getSelectedTask();
+  }
+
+  // Update complete property
   updateTaskItems(task: Task) {
     this.taskItems.update((items) => {
       return items.map((item) => {
@@ -48,5 +62,7 @@ export class TasksComponent implements OnInit{
     this.taskItems.update((items) => [task, ...items]);  // update task items for ui
 
   }
+  
+
 }
 
