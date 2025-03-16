@@ -18,7 +18,7 @@ export class ChartComponent {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective<'bar'> | undefined;
 
   taskService = inject(TasksService);
-  tasks = signal(this.taskService.taskItems);
+  tasks = signal<Task[]>([]);
   timeSpentTodayValue: number = 0;
   
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {
@@ -75,12 +75,13 @@ export class ChartComponent {
   async ngOnInit() {
     await this.taskService.dbLoaded;
     console.log(this.taskService.taskItems); // log taskCollection from task service
-    if (this.taskService.taskItems) {
-      this.tasks.set(this.taskService.taskItems);
-    } else {
-      this.tasks.set([]);
-    }
-    console.log(this.taskService.taskCollection);
+    // if (this.taskService.taskItems) {
+    //   this.tasks.set(this.taskService.taskItems);
+    // } else {
+    //   this.tasks.set([]);
+    // }
+    // console.log(this.taskService.taskCollection);
+    this.tasks.set(this.taskService.getAllTasks());
     this.calculateTimeSpentToday(this.tasks());
 
   }

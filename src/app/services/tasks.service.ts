@@ -101,5 +101,9 @@ export class TasksService {
     }
   }
 
+  getAllTasks(): Task[] {
+    return this.taskCollection ? this.taskCollection.find() : [];  // Get fresh tasks from DB
+  }
+
 
 }

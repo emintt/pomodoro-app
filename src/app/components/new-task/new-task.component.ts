@@ -16,7 +16,8 @@ export class NewTaskComponent {
   enteredTaskName = '';
   // task event to emit entered task to task component through task event
   taskOutput = output<Task>();
-  tasksService = inject(TasksService);
+  // tasksService = inject(TasksService);
+  constructor(private tasksService: TasksService) {}
 
   submitted = false;
 
