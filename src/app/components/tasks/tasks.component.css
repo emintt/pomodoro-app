@@ -24,3 +24,8 @@ ul {
   color: #555;
   margin-left: 10px;
 }
+
+.working-on-task {
+  font-size: 20px;
+  font-weight: 700;
+}

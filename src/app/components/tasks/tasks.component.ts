@@ -43,23 +43,13 @@ export class TasksComponent implements OnInit{
 
   // Mark completed and remove task from ui
   deleteTask(task: Task) {
-    this.updateTaskItems(task);
+    this.taskService.markTaskAsCompleted(task); // Mark the task as completed in the database
+    this.taskItems.update((items) => 
+      items.filter((item) => item.completed === false)
+    );
+   
   }
 
-  // Update complete property
-  updateTaskItems(task: Task) {
-    this.taskItems.update((items) => {
-      return items.map((item) => {
-        if (item.$loki === task.$loki) {
-          return {
-            ...item,
-            completed: !item.completed,
-          };
-        }
-        return item;
-      });
-    });
-  }
 
   addTaskItem(task: Task) {
     console.log(task);

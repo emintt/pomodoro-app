@@ -28,7 +28,7 @@ export class TasksService {
           if (this.taskCollection.count() === 0) {
             this.insertInitialData();
           }
-          this.taskItems = this.taskCollection.find().reverse();
+          this.taskItems = this.taskCollection.find({ completed: false }).reverse();
           console.log(this.taskItems);
           resolve();
         },
@@ -84,6 +84,20 @@ export class TasksService {
       taskToUpdate.totalTimeSpent += timeSpent;
       this.taskCollection.update(taskToUpdate);
       console.log(`Updated time for ${task.name}: ${taskToUpdate.totalTimeSpent} ms`);
+    }
+  }
+
+  markTaskAsCompleted(task: Task) {
+    if (!this.taskCollection) {
+      return;
+    }
+
+    // Find task in db
+    const taskToUpdate = this.taskCollection.findOne({ $loki: task.$loki });
+    if (taskToUpdate) {
+      taskToUpdate.completed = true;
+      this.taskCollection.update(taskToUpdate);
+      console.log(`Marked task as completed: ${task.name}`);
     }
   }
 

@@ -1,12 +1,12 @@
 <div class="tasks-container">
   @if (!taskItems().length) {
-  <p>Loading...</p>
+  <p>No task found</p>
   }
-
-  <app-new-task (taskOutput)="this.addTaskItem($event)" />
   @if (selectedTask) {
-    <p >Working on: {{ selectedTask.name }}</p>
-    }
+    <p class="working-on-task">Working on: {{ selectedTask.name }}</p>
+  }
+  <app-new-task (taskOutput)="this.addTaskItem($event)" />
+  
   <ul class="task-items">
     @for (task of taskItems(); track task.$loki) {
       <li>
