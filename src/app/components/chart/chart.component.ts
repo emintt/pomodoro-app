@@ -1,25 +1,32 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild, signal } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartEvent } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { TasksService } from '../../services/tasks.service';
+import { Task } from '../../types/tasks.type';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-chart',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, CommonModule],
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.css'
 })
 export class ChartComponent {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective<'bar'> | undefined;
 
+  taskService = inject(TasksService);
+  tasks = signal(this.taskService.taskItems);
+  timeSpentTodayValue: number = 0;
+  
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {
     // We use these empty structures as placeholders for dynamic theming.
     scales: {
       x: {},
       y: {
-        min: 10,
+        min: 1,
       },
     },
     plugins: {
@@ -32,13 +39,15 @@ export class ChartComponent {
       },
     },
   };
+
+  
   public barChartType = 'bar' as const;
 
   public barChartData: ChartData<'bar'> = {
-    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
+    labels: [],
     datasets: [
-      { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-      { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
+      { data: [], label: 'Time Spent (minutes)' },
+      // { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
     ],
   };
 
@@ -63,20 +72,41 @@ export class ChartComponent {
     console.log(event, active);
   }
 
-  public randomize(): void {
-    // Only Change 3 values
-    this.barChartData.datasets[0].data = [
-      Math.round(Math.random() * 100),
-      59,
-      80,
-      Math.round(Math.random() * 100),
-      56,
-      Math.round(Math.random() * 100),
-      40,
-    ];
+  async ngOnInit() {
+    await this.taskService.dbLoaded;
+    console.log(this.taskService.taskItems); // log taskCollection from task service
+    if (this.taskService.taskItems) {
+      this.tasks.set(this.taskService.taskItems);
+    } else {
+      this.tasks.set([]);
+    }
+    console.log(this.taskService.taskCollection);
+    this.calculateTimeSpentToday(this.tasks());
 
-    this.chart?.update();
-}
+  }
+
+  calculateTimeSpentToday(tasks: Task[]) {
+    const now = new Date();
+    console.log(now.toISOString().split('T')[0]);
+    console.log(tasks);
+    let time = 0;
+    this.tasks().forEach(task => {
+      if (new Date(task.startTime).toISOString().split('T')[0] === now.toISOString().split('T')[0]) {
+        if (task.totalTimeSpent !== undefined) {
+          time += task.totalTimeSpent;
+        }
+      }
+    });
+    this.timeSpentTodayValue = time; // seconds
+  }
+
+  generateTimeFormat(milliseconds: number): string {
+    const hours = Math.floor(milliseconds / 3600000);
+    const minutes = Math.floor((milliseconds % 3600000) / 60000);
+    const seconds = Math.floor((milliseconds % 60000) /1000);
+
+    return `${hours} hours ${minutes} minutes ${seconds} seconds`;
+  }
 }
 
 

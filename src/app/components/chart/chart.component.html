@@ -9,7 +9,9 @@
   >
   </canvas>
 
-  <button mat-button mat-raised-button color="primary" (click)="randomize()">
+  <!-- <button mat-button mat-raised-button color="primary" (click)="randomize()">
     Update
-  </button>
+  </button> -->
+  <p class="time-spent">Time spent on focusing today: {{ this.generateTimeFormat(this.timeSpentTodayValue) }}</p>
+
 </div>

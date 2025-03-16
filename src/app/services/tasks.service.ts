@@ -28,7 +28,7 @@ export class TasksService {
           if (this.taskCollection.count() === 0) {
             this.insertInitialData();
           }
-          this.taskItems = this.taskCollection.find({ completed: false }).reverse();
+          this.taskItems = this.taskCollection.find().reverse();
           console.log(this.taskItems);
           resolve();
         },

@@ -24,7 +24,7 @@ export class TasksComponent implements OnInit{
     await this.taskService.dbLoaded;
     console.log(this.taskService.taskItems); // log taskCollection from task service
     if (this.taskService.taskItems) {
-      this.taskItems.set(this.taskService.taskItems);
+      this.taskItems.set(this.taskService.taskItems.filter((task) => task.completed === false));
     } else {
       this.taskItems.set([]);
     }
@@ -50,6 +50,20 @@ export class TasksComponent implements OnInit{
    
   }
 
+  // // Update complete property
+  // updateTaskItems(task: Task) {
+  //   this.taskItems.update((items) => {
+  //     return items.map((item) => {
+  //       if (item.$loki === task.$loki) {
+  //         return {
+  //           ...item,
+  //           completed: !item.completed,
+  //         };
+  //       }
+  //       return item;
+  //     });
+  //   });
+  // }
 
   addTaskItem(task: Task) {
     console.log(task);
