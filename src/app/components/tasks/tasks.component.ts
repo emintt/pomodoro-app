@@ -22,12 +22,13 @@ export class TasksComponent implements OnInit{
 
   async ngOnInit(): Promise<void> {
     await this.taskService.dbLoaded;
-    console.log(this.taskService.taskItems); // log taskCollection from task service
-    if (this.taskService.taskItems) {
-      this.taskItems.set(this.taskService.taskItems.filter((task) => task.completed === false));
-    } else {
-      this.taskItems.set([]);
-    }
+    const tasksFromDB = this.taskService.getAllTasks().filter((task) => !task.completed);
+    this.taskItems.set(tasksFromDB); 
+    // if (this.taskService.taskItems) {
+    //   this.taskItems.set(this.taskService.taskItems.filter((task) => task.completed === false));
+    // } else {
+    //   this.taskItems.set([]);
+    // }
     console.log(this.taskService.taskCollection);
   }
 

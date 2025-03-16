@@ -65,6 +65,7 @@ export class TasksService {
           completed: false
         }
       );
+      this.taskCollection.flushChanges(); // save to db
       return newTask ? newTask : null;
     } else {
       console.log('cannot add task to db');
