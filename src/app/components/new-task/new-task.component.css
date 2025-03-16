@@ -3,3 +3,7 @@
   background-color: #f8d7da;
   border-color: #f5c6cb;
 }
+
+.new-task-container {
+  margin-bottom: 16px;
+}

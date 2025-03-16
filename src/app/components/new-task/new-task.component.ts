@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output, output } from '@angular/core';
+import { Component, EventEmitter, inject, Output, output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Task } from '../../types/tasks.type';
+import { TasksService } from '../../services/tasks.service';
 
 
 @Component({
@@ -15,16 +16,20 @@ export class NewTaskComponent {
   enteredTaskName = '';
   // task event to emit entered task to task component through task event
   taskOutput = output<Task>();
+  tasksService = inject(TasksService);
 
   submitted = false;
 
   onSubmit(newTaskForm: NgForm) {
     console.log('submit');
-    this.taskOutput.emit({
+    const newTask = this.tasksService.addTask({
       name: this.enteredTaskName,
       startTime: Date.now(),
-      completed: false 
-    });
+      completed: false
+    } as Task);
+    if (newTask) {
+      this.taskOutput.emit(newTask);
+    }
     this.submitted = true;
     newTaskForm.reset();
   }

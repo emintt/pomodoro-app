@@ -41,6 +41,11 @@ export class TasksComponent implements OnInit{
     return this.selectedTaskService.getSelectedTask();
   }
 
+  // Mark completed and remove task from ui
+  deleteTask(task: Task) {
+    this.updateTaskItems(task);
+  }
+
   // Update complete property
   updateTaskItems(task: Task) {
     this.taskItems.update((items) => {
@@ -58,9 +63,10 @@ export class TasksComponent implements OnInit{
 
   addTaskItem(task: Task) {
     console.log(task);
-    this.taskService.addTask(task); // save task to db
-    this.taskItems.update((items) => [task, ...items]);  // update task items for ui
-
+    const newTask = this.taskService.addTask(task); // save task to db
+    if (newTask) {
+      this.taskItems.update((items) => [newTask, ...items]);  // update task items for ui
+    }
   }
   
 

@@ -1,3 +1,48 @@
-.time-spent {
-  margin-left: 10px;
+.task_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background-color: #2a305c; /* Darker shade of blue for contrast */
+  color: #ffffff; /* White text for readability */
+}
+
+.task_item:hover {
+  background-color: #3a4380; /* Lighter blue on hover */
+  border-color: #6472c3; /* Subtle border color change */
+}
+
+/* Selected Task */
+.task_item.selected {
+  border-color: #6472c3; /* Highlighted border */
+  background-color: #424b86; /* Slightly lighter than default */
+  font-weight: bold;
+}
+
+/* Task Name */
+.task_name {
+  flex-grow: 1;
+  font-weight: 500;
+  color: #ffffff; /* White for visibility */
+}
+
+
+
+/* Delete Button */
+.delete-btn {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  color: darkred;
+  transform: scale(1.2);
 }

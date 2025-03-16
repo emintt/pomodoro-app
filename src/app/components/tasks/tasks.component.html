@@ -4,33 +4,21 @@
   }
 
   <app-new-task (taskOutput)="this.addTaskItem($event)" />
-
-  <!-- <form>
-    <div>
-      <label for="project"></label>
-      <input type="text" id="title" name="project" placeholder="Add project..." />
-      <button type="submit">Add</button>
-    </div>
-  </form> -->
-
+  @if (selectedTask) {
+    <p >Working on: {{ selectedTask.name }}</p>
+    }
   <ul class="task-items">
     @for (task of taskItems(); track task.$loki) {
       <li>
         <app-task-item 
-          (taskToggle)="this.updateTaskItems($event)" 
-          [task]="task" 
-          (click)="this.selectTask(task)">
+          [task]="task"
+          [isSelected]="selectedTask?.$loki === task.$loki"
+          (taskSelected)="selectTask($event)"
+          (taskDeleted)="deleteTask($event)">
         </app-task-item>
-        <button 
-          (click)="selectTask(task)" 
-          [disabled]="selectedTask?.$loki === task.$loki">
-          {{ selectedTask?.$loki === task.$loki ? 'Selected' : 'Select' }}
-        </button>
-        <p>Time spent: {{task.totalTimeSpent ? task.totalTimeSpent / 1000 : 0}}</p>
       </li>
     }
   </ul>
-  @if (selectedTask) {
-  <p >Currently working on: {{ selectedTask.name }}</p>
-  }
+
+  
 </div>

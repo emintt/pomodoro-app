@@ -18,7 +18,7 @@ export class TimerComponent {
   selectedTaskService = inject(SelectedTaskService);
   tasksService = inject(TasksService);
 
-  initialTime = 5 * 1000; // 5s
+  initialTime = 5 * 1000; 
   remainingTime = signal<number>(this.initialTime);  
   intervalId: ReturnType<typeof setTimeout> | undefined = undefined;
   minute = computed(

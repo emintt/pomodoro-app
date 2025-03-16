@@ -54,9 +54,9 @@ export class TasksService {
     }
   }
 
-  addTask(task: Task) {
+  addTask(task: Task): Task | null {
     if (this.taskCollection) {
-      this.taskCollection.insert([
+      const newTask = this.taskCollection.insertOne(
         {
           name: task.name,
           startTime: task.startTime,
@@ -64,9 +64,11 @@ export class TasksService {
           pomodorosCompleted: 0,
           completed: false
         }
-      ]);
+      );
+      return newTask ? newTask : null;
     } else {
       console.log('cannot add task to db');
+      return null;
     }
   }
 
@@ -77,7 +79,7 @@ export class TasksService {
 
     // Find task in db
     const taskToUpdate = this.taskCollection.findOne({$loki: task.$loki});
-
+    console.log('task to update time' + taskToUpdate);
     if (taskToUpdate && taskToUpdate.totalTimeSpent !== undefined) {
       taskToUpdate.totalTimeSpent += timeSpent;
       this.taskCollection.update(taskToUpdate);
