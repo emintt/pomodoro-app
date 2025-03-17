@@ -16,18 +16,18 @@ export class NewTaskComponent {
   enteredTaskName = '';
   // task event to emit entered task to task component through task event
   taskOutput = output<Task>();
-  // tasksService = inject(TasksService);
-  constructor(private tasksService: TasksService) {}
+  tasksService = inject(TasksService);
+  // constructor(private tasksService: TasksService) {}
 
   submitted = false;
 
   onSubmit(newTaskForm: NgForm) {
     console.log('submit');
-    const newTask = this.tasksService.addTask({
+    const newTask ={
       name: this.enteredTaskName,
       startTime: Date.now(),
       completed: false
-    } as Task);
+    } as Task;
     if (newTask) {
       this.taskOutput.emit(newTask);
     }
