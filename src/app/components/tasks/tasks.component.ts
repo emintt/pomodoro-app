@@ -24,12 +24,7 @@ export class TasksComponent implements OnInit{
     await this.taskService.dbLoaded;
     const tasksFromDB = this.taskService.getAllTasks().filter((task) => !task.completed);
     this.taskItems.set(tasksFromDB); 
-    // if (this.taskService.taskItems) {
-    //   this.taskItems.set(this.taskService.taskItems.filter((task) => task.completed === false));
-    // } else {
-    //   this.taskItems.set([]);
-    // }
-    console.log(this.taskService.taskCollection);
+    console.log(this.taskItems());
   }
 
   // Select a task using SelectedTaskService

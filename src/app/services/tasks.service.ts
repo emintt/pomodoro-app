@@ -18,8 +18,8 @@ export class TasksService {
     this.dbLoaded = new Promise((resolve, reject) => {
       
       this.db = new Loki('pomodoro-app.db', {
-        autoload: true,
-        autosave: true,
+        autoload: true, // load data from file on startup
+        autosave: true,  // save data automatically
         autoloadCallback: () => {
           this.taskCollection = this.db.getCollection<Task>('taskItems') 
             || this.db.addCollection<Task>('taskItems');
@@ -32,7 +32,7 @@ export class TasksService {
           console.log(this.taskItems);
           resolve();
         },
-        // autosaveInterval: 4000 
+        autosaveInterval: 4000 
       });
     })
   }
@@ -104,7 +104,7 @@ export class TasksService {
   }
 
   getAllTasks(): Task[] {
-    return this.taskCollection ? this.taskCollection.find() : [];  // Get fresh tasks from DB
+    return this.taskCollection ? this.taskCollection.find().reverse() : [];  // Get fresh tasks from DB
   }
 
 
