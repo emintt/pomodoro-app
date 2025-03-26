@@ -1,3 +1,8 @@
+type Session = {
+  date: Date;
+  duration: number;
+};
+
 type Task = {
   $loki?: number;
   projectId?: number;
@@ -6,10 +11,11 @@ type Task = {
   completed: boolean;
   totalTimeSpent?: number; // in milliseconds
   pomodorosCompleted?: number; 
+  workSessions?: Session[];
 };
 
 type Project = {
   id: number;
   name: string;
 };
-export type {Task};
+export type {Task, Session};

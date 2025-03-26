@@ -1,6 +1,8 @@
 import Loki from 'lokijs';
 import { Injectable, signal } from '@angular/core';
 import { Task } from '../types/tasks.type';
+import { formatDate } from '@angular/common';
+import { getDateStringFromDate } from '../utils/date.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -74,7 +76,7 @@ export class TasksService {
     }
   }
 
-  updateTaskTime(task: Task, timeSpent: number) {
+  updateTaskTime(task: Task, date: Date, timeSpent: number) {
     if (!this.taskCollection) {
       return;
     } ;
@@ -82,8 +84,36 @@ export class TasksService {
     // Find task in db
     const taskToUpdate = this.taskCollection.findOne({$loki: task.$loki});
     console.log('task to update time' + taskToUpdate);
+
+    if (taskToUpdate) {
+      if (!taskToUpdate.workSessions) {
+        taskToUpdate.workSessions = [];
+      }
+
+      // get the date string from Date object
+      const dateString = getDateStringFromDate(date);
+      
+      // find if this task has been started before
+      const sessionToUpdate = taskToUpdate.workSessions.find((object, index) => {
+        const sessionDateString = getDateStringFromDate(new Date(object.date));
+        return sessionDateString === dateString;
+      });
+
+      // if there is one, update its duration, otherwise add a session to it
+      if (sessionToUpdate) {
+        sessionToUpdate.duration += timeSpent;
+      } else {
+        taskToUpdate.workSessions.push({
+          date: date,
+          duration: timeSpent
+        });
+      }
+      
+    }
     if (taskToUpdate && taskToUpdate.totalTimeSpent !== undefined) {
       taskToUpdate.totalTimeSpent += timeSpent;
+     
+
       this.taskCollection.update(taskToUpdate);
       console.log(`Updated time for ${task.name}: ${taskToUpdate.totalTimeSpent} ms`);
     }

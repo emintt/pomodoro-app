@@ -18,7 +18,7 @@ export class TimerComponent {
   selectedTaskService = inject(SelectedTaskService);
   tasksService = inject(TasksService);
 
-  initialTime = 25 * 60 * 1000; 
+  initialTime = 5 * 1000; 
   remainingTime = signal<number>(this.initialTime);  
   intervalId: ReturnType<typeof setTimeout> | undefined = undefined;
   minute = computed(
@@ -41,9 +41,10 @@ export class TimerComponent {
       clearInterval(this.intervalId);
       this.intervalId = undefined;
 
+      const date = new Date();
       const duration = this.initialTime;
       if (this.selectedTask) {
-        this.tasksService.updateTaskTime(this.selectedTask, duration);
+        this.tasksService.updateTaskTime(this.selectedTask, date, duration);
       }
 
       this.notificationService.sendNotification('Pomodoro', `It's time to take a short break!`);

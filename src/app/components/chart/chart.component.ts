@@ -5,6 +5,8 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { TasksService } from '../../services/tasks.service';
 import { Task } from '../../types/tasks.type';
 import { CommonModule } from '@angular/common';
+import { getDateStringFromDate } from '../../utils/date.utils';
+
 
 
 @Component({
@@ -74,29 +76,36 @@ export class ChartComponent {
 
   async ngOnInit() {
     await this.taskService.dbLoaded;
-    console.log(this.taskService.taskItems); // log taskCollection from task service
-    // if (this.taskService.taskItems) {
-    //   this.tasks.set(this.taskService.taskItems);
-    // } else {
-    //   this.tasks.set([]);
-    // }
-    // console.log(this.taskService.taskCollection);
+
     this.tasks.set(this.taskService.getAllTasks());
     this.calculateTimeSpentToday(this.tasks());
 
   }
 
+  // total time spent on all tasks today
   calculateTimeSpentToday(tasks: Task[]) {
     const now = new Date();
-    console.log(now.toISOString().split('T')[0]);
-    console.log(tasks);
+    const todayDateString = getDateStringFromDate(now);
+
     let time = 0;
     this.tasks().forEach(task => {
-      if (new Date(task.startTime).toISOString().split('T')[0] === now.toISOString().split('T')[0]) {
-        if (task.totalTimeSpent !== undefined) {
-          time += task.totalTimeSpent;
+      if (task.workSessions) {
+        // find the session today
+        const todaySession = task.workSessions.find((session) => {
+          const sessionDatetring = getDateStringFromDate(new Date(session.date));
+          return sessionDatetring === todayDateString;
+        });
+
+        if (todaySession) {
+          time += todaySession.duration;
         }
       }
+      // const startTimeString = getDateStringFromDate(new Date(task.startTime));
+      // if (startTimeString === todayDateString) {
+      //   if (task.totalTimeSpent !== undefined) {
+      //     time += task.totalTimeSpent;
+      //   }
+      // }
     });
     this.timeSpentTodayValue = time; // seconds
   }
