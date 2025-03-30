@@ -45,10 +45,25 @@ export class ChartComponent {
   
   public barChartType = 'bar' as const;
 
+  // create mock bar chart data map
+  data = [
+    {day: 'Mon', timeSpent: 12 },
+    {day: 'Tues', timeSpent: 13 },
+    {day: 'Wed', timeSpent: 15 },
+    {day: 'Thu', timeSpent: 1 },
+    {day: 'Fri', timeSpent: 12 },
+    {day: 'Sat', timeSpent: 0 },
+    {day: 'Sun', timeSpent: 10 }
+  ];
+
+  labels = this.data.map((item) => item.day);
+  dataOfDatasets = this.data.map((item) => item.timeSpent);
+  
+
   public barChartData: ChartData<'bar'> = {
-    labels: [],
+    labels: this.labels,
     datasets: [
-      { data: [], label: 'Time Spent (minutes)' },
+      { data: this.dataOfDatasets, label: 'Time Spent (minutes)' },
       // { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
     ],
   };
@@ -79,7 +94,8 @@ export class ChartComponent {
 
     this.tasks.set(this.taskService.getAllTasks());
     this.calculateTimeSpentToday(this.tasks());
-
+    console.log(this.dataOfDatasets);
+    console.log(this.labels);
   }
 
   // total time spent on all tasks today
