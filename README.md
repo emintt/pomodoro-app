@@ -9,7 +9,7 @@ This is a Pomodoro-based task tracking application built with Angular and Tauri.
 
 ###
 
-[![Watch the video](/screenshots/ui.png)](https://www.youtube.com/watch?v=BmkxaTUH9y8)
+[![Watch the video](/screenshots/youtube-image.png)](https://www.youtube.com/watch?v=BmkxaTUH9y8)
 
 ### Features
 
