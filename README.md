@@ -7,7 +7,7 @@ This is a Pomodoro-based task tracking application built with Angular and Tauri.
 **Windows:** [Download the latest build](/output/pomodoro-app_0.1.0_x64-setup.exe)  
 **macOS:** Currently, I don't have a macOS machine. Please follow the build instructions to compile the app yourself if you use macOS.
 
-###
+### Overview of the app
 
 [![Watch the video](/screenshots/youtube-image.png)](https://www.youtube.com/watch?v=BmkxaTUH9y8)
 
