@@ -96,9 +96,6 @@ export class ChartComponent {
     this.tasks.set(this.taskService.getAllTasks());
     this.timeSpentTodayValue = this.calculateTimeSpentByDate(this.now);
     this.createChartData();
-    console.log(this.dataOfDatasets);
-    console.log(this.labels);
-    this.dateArray();
   }
 
   calculateTimeSpentByDate(date: Date): number {
@@ -109,8 +106,8 @@ export class ChartComponent {
       if (task.workSessions) {
         // find the session today
         const todaySession = task.workSessions.find((session) => {
-          const sessionDatetring = getDateStringFromDate(new Date(session.date));
-          return sessionDatetring === todayDateString;
+          const sessionDateString = getDateStringFromDate(new Date(session.date));
+          return sessionDateString === todayDateString;
         });
 
         if (todaySession) {
@@ -131,30 +128,27 @@ export class ChartComponent {
   }
 
   // Get the date range for current week
-  // Week starts on Monday, ex. Mon = 1, Sat = 6, Sun = 0
+  // Week starts on Monday, ex. Mon = 1, Sat = 6, Sun = 0 (getDay method)
   // Sun = 0 is the previous week
-  // getWeekDay(date = new Date()) {
-  //   let d = new Date(); 
-  //   // if it is Sunday (0), set 
-  //   d.getDate();
-  // }
-
-  // Create a mock date array for a week
-  dateArray = () => {
-    const todayMonday = new Date(); // bc today is monday :)
-    const dateArr = [todayMonday, new Date(todayMonday.getDate() + 1), new Date(todayMonday.getDate() + 2),new Date(todayMonday.getDate() + 3), new Date(todayMonday.getDate() + 4), 
-      new Date(todayMonday.getDate() + 5), new Date(todayMonday.getDate() + 6)];
-    console.log(dateArr);
-    return dateArr;
+  getWeekDay(): Date[] {
+    const curr = new Date(); 
+    const week: Date[] = [];
+  
+    for (let i = 1; i <= 7; i++) {
+      // calculates the date for each day of the current week (Mon to Sun)
+      // curr.getDay(): 0 (Sunday) to 6 (Saturday)
+      // day of the month - day of the week get us to the previous sunday
+      // then + 1 get to monday
+      let day = curr.getDate() - curr.getDay() + i; 
+      const targetDate = new Date(curr.setDate(day));
+      // const dayString = getDateStringFromDate(targetDate);
+      week.push(targetDate);
+    }
+    console.log(week);
+    return week;
   }
 
   createChartData() {
-    const now = new Date();
-    const todayDateString = getDateStringFromDate(now);
-    let dayToDisplay = 0;
-    console.log(todayDateString);
-    console.log(now.getDay() -1); // example mon -> 1
-
     const milliToHours = (milli: number): number => {
       return milli / (1000 * 60 * 60);
     }
@@ -162,50 +156,30 @@ export class ChartComponent {
     const milliToMinutes = (milli: number): number => {
       return milli / (1000 * 60 );
     }
-    if (now.getDay() === 1) {
-      console.log(this.now);
-      this.data = [
-        {day: 'Mon', timeSpent: this.timeSpentTodayValue },
-        {day: 'Tue', timeSpent: 0 },
-        {day: 'Wed', timeSpent: 0 },
-        {day: 'Thu', timeSpent: 0 },
-        {day: 'Fri', timeSpent: 0 },
-        {day: 'Sat', timeSpent: 0 },
-        {day: 'Sun', timeSpent: 0 }
-      ];
-    } else if (now.getDay() === 3) {
-      // dayToDisplay = 2;
-      // if (dayToDisplay >= 1) {
-      //   for (let i = 1; i < dayToDisplay; i++) {
-      //     console.log('hehe');
-      //   } 
-      // }
-      this.data = [
-        {day: 'Mon', timeSpent:  0},
-        {day: 'Tue', timeSpent: 0 },
-        {day: 'Wed', timeSpent: this.timeSpentTodayValue },
-        {day: 'Thu', timeSpent: 0 },
-        {day: 'Fri', timeSpent: 0 },
-        {day: 'Sat', timeSpent: 0 },
-        {day: 'Sun', timeSpent: 0 }
-      ];
+
+    const weekDates = this.getWeekDay();
+    
+    this.data.forEach((dataObj, index) => {
+      dataObj.timeSpent = this.calculateTimeSpentByDate(weekDates[index]);
+    });
+    console.log(this.data);
+  
+    // update labels and dataset data
+    this.labels = this.data.map((item) => item.day);
+    this.dataOfDatasets = this.data.map((item) => item.timeSpent);
+
+    // update the chart data dynamically
+    this.barChartData = {
+      labels: this.labels,
+      datasets: [
+        { data: this.dataOfDatasets, label: 'Time Spent (ms)' },
+      ],
+    };
+
+    // refresh the chart
+    if (this.chart) {
+      this.chart.update();
     }
-  // update labels and dataset data
-  this.labels = this.data.map((item) => item.day);
-  this.dataOfDatasets = this.data.map((item) => item.timeSpent);
-
-  // update the chart data dynamically
-  this.barChartData = {
-    labels: this.labels,
-    datasets: [
-      { data: this.dataOfDatasets, label: 'Time Spent (ms)' },
-    ],
-  };
-
-  // refresh the chart
-  if (this.chart) {
-    this.chart.update();
-  }
   }
 }
 
