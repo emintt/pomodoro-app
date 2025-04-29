@@ -1,7 +1,18 @@
 
 <div class="timer">
+  <div class="stage-buttons-wrapper">
+    <button id="stage-button-pomodoro" class="stage-button stage-button--active">
+      Pomodoro
+    </button>
+    <button class="stage-button">
+      Short Break
+    </button>
+    <button class="stage-button">
+      Long Break
+    </button>
+  </div>
   <p>{{minute()}}: {{second()}}</p>
-  <div class="buttons">
+  <div class="control-buttons">
     <button (click)="start()">Start</button>
     <button (click)="pause()">Pause</button>
   </div>

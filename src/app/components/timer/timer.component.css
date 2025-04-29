@@ -24,14 +24,14 @@
   margin: 20px
 }
 
-.buttons {
+.control-buttons {
   display: flex;
   justify-content: center;
   gap: 16px; /* Space between buttons */
   margin-top: 20px;
 }
 
-button {
+.control-buttons button {
   flex: 1;
   max-width: 150px;
   background: none;
@@ -45,8 +45,34 @@ button {
   transition: all 0.3s ease;
 }
 
-button:hover {
+.control-buttons button:hover {
   background: #FFF2F2;
   color: #2D336B;
   transform: scale(1.05);
+}
+
+/* options */
+/* styles.css */
+.stage-buttons-wrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stage-button {
+  font-size: 1rem;
+  height: 28px;
+  background-color: transparent;
+  color: white;
+  font-weight: 300;
+  border: 0;
+  border-radius: 0.25rem;
+  padding: 2px 12px;
+  margin: 0;
+  box-shadow: none;
+}
+
+.stage-button--active {
+  background-color: rgba(0, 0, 0, 0.15);
+  font-weight: 700;
 }
